@@ -4,6 +4,9 @@ let nextButton = document.querySelector('.next-button')
 let input = document.querySelector('.input');
 let hideButton = document.querySelector('.hide-ul')
 let list = document.querySelector('ul');
+let lastAnswer = document.querySelector('.last-answer');
+let rulesButton = document.querySelector('.rules-button');
+let rules = document.querySelector('.rules');
 
 let verbs = ['eat/eats/eating', 'walk/walks/walking', 'run/runs/running', 'hunt/hunts/hunting', 'sleep/sleeps/sleeping', 'draw/draws/drawing', 'have breakfast/has breakfast/having breakfast', 'shave/shaves/shaving', 'have a shower/has a shower/having a shower', 'drive to work/drives to work/driving to work', 'have a break/has a break/having a break', 'play football/plays football/playing football', 'go out/goes out/going out', 'visit relatives/visits relatives/visiting relatives', 'wear clothes/wears clothes/wearing clothes', 'do housework/does housework/doing housework', 'go to parties/goes to parties/going to parties', 'watch TV/watches TV/watching TV', 'play cards/plays cards/playing cards', 'feed pets/feeds pets/feeding pets']
 let nounsAm = ['I'];
@@ -25,14 +28,18 @@ let rnd = Math.floor(Math.random() * number.length);
 let currNumber = number[rnd];
 let k = 1;
 
+rulesButton.addEventListener('click', ()=>{
+    rules.classList.toggle('hidden');
+})
+
 hideButton.addEventListener('click', () => {
     list.classList.toggle('hidden');
     if (k == 1) {
-        hideButton.innerHTML = 'Show Answers'
+        hideButton.innerHTML = 'Hide Answers'
         hideButton.classList.add('show');
         k=0;
     } else if (k == 0) {
-        hideButton.innerHTML = 'Hide Answers'
+        hideButton.innerHTML = 'Show Answers'
         hideButton.classList.remove('show');
         k=1;
     }
@@ -249,20 +256,21 @@ function Excercise() {
 
         case 38:
             task = "Если +";
-            rightAnsw = 'If ' + choose[0] + ' ' + choose[1].split('/')[splitForm] + `, smb will do smth`;
+            rightAnsw = 'If ' + choose[0] + ' ' + choose[1].split('/')[splitForm] + `, smth will happen`;
             break;
         case 39:
             task = "Если -";
-            rightAnsw = 'If ' + choose[0] + ' ' + helpDo[1] + ' ' + choose[1].split('/')[0] + `, smb won't do smth`;
+            rightAnsw = 'If ' + choose[0] + ' ' + helpDo[1] + ' ' + choose[1].split('/')[0] + `, smth won't happen`;
             break;
         case 40:
             task = "Если ?";
-            rightAnsw = 'If ' + choose[0] + ' ' + choose[1].split('/')[splitForm] + `, will smb do smth`;
+            rightAnsw = 'If ' + choose[0] + ' ' + choose[1].split('/')[splitForm] + `, will smth happen`;
             break;
     }
     condition.innerHTML = task;
 }
-nextButton.addEventListener('click', () => {
+
+function buttonClick() {
     if (started == 0) {
         Example();
         Excercise();
@@ -270,7 +278,7 @@ nextButton.addEventListener('click', () => {
         input.classList.remove('blocked')
         console.log('sda')
     } else {
-        if (input.value == '') return;
+        // if (input.value == '') return;
         document.querySelector(`.a${currNumber}`).children[0].innerHTML = rightAnsw;
         document.querySelector(`.a${currNumber}`).children[0].classList.add('active');
 
@@ -281,6 +289,7 @@ nextButton.addEventListener('click', () => {
             document.querySelector(`.a${currNumber}`).children[1].classList.add('active');
         }
 
+        lastAnswer.innerHTML =`<div class="label">Last answer</div>${rightAnsw}`;
         number.splice(rnd, 1);
         rnd = Math.floor(Math.random() * (number.length - 1));
         currNumber = number[rnd];
@@ -288,6 +297,16 @@ nextButton.addEventListener('click', () => {
         input.value = '';
     }
     started++;
+}
 
+document.addEventListener("keypress", () => {
+    if (event.key === "Enter") buttonClick();
 });
+
+nextButton.addEventListener("click", () => {
+    buttonClick();
+});
+
+
+
 
